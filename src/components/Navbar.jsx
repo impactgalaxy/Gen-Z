@@ -13,12 +13,20 @@ import {
 } from "@/components/ui/dialog"
 import { Field } from "@/components/ui/field"
 import { useForm } from "react-hook-form";
+// const http = "http://localhost:5173";
+import axios from "axios";
+
 export default function Navbar() {
     const {register, handleSubmit, formState: {isSubmitting}}= useForm();
   
-    const handleRegister =(values)=>{
-console.log(values)
-  }
+    const handleRegister = async (data) => {
+      try {
+        const response = await axios.post('http://localhost:5000/members', data);
+        console.log('Registration successful:', response.data);
+      } catch (error) {
+        console.error('Registration failed:', error);
+      }
+    };
   return (
 <>
     <div className='flex items-center justify-between p-10 bg-amber-600 '>
