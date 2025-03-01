@@ -1,6 +1,6 @@
 
 import { IoMdPersonAdd } from "react-icons/io";
-import { Button, Input, Stack } from "@chakra-ui/react"
+import { Button, Heading, Input, Stack } from "@chakra-ui/react"
 import {
   DialogActionTrigger,
   DialogBody,
@@ -13,29 +13,36 @@ import {
 } from "@/components/ui/dialog"
 import { Field } from "@/components/ui/field"
 import { useForm } from "react-hook-form";
-// const http = "http://localhost:5173";
 import axios from "axios";
+import toast from "react-hot-toast";
+import moment from "moment";
+
 
 export default function Navbar() {
-    const {register, handleSubmit, formState: {isSubmitting}}= useForm();
-  
+    const {register, handleSubmit, formState: {isSubmitting}, reset}= useForm();  
+    const date = moment().format('LL');
     const handleRegister = async (data) => {
+      data.registrationDate = date;
       try {
         const response = await axios.post('http://localhost:5000/members', data);
-        console.log('Registration successful:', response.data);
+        if(response.data.insertedId){
+          toast.success("Member added successfully");
+          reset();
+        }
       } catch (error) {
         console.error('Registration failed:', error);
+        toast.error(error?.message + ", please try again");
+        reset();
       }
     };
   return (
-<>
-    <div className='flex items-center justify-between p-10 bg-amber-600 '>
-        <h1 className='font-bold text-lg'>Profile</h1>
-        <h1 className='font-black text-lg'>Gen-Z mess (Mirpur Branch)</h1>
+    <div className='flex bg-amber-600 items-center justify-between'>
+        <Heading fontSize="xl" color="fg">Welcome</Heading>
+        <Heading fontSize="xl" color="fg">Gen-Z mess (mirpur branch)</Heading>
       
-        <DialogRoot closeOnInteractOutside={false}>
+        <DialogRoot>
        <DialogTrigger asChild>
-        <Button colorPalette="teal" variant="solid" >
+        <Button colorPalette="teal" variant="solid">
             <IoMdPersonAdd /> Add member
         </Button>
       </DialogTrigger>
@@ -48,7 +55,7 @@ export default function Navbar() {
         <DialogBody pb="4">
           <Stack gap="4">
             <Field label="Full name">
-              <Input placeholder="First Name" {...register("fullName")}/>
+              <Input placeholder="Full Name" required {...register("fullName")}/>
             </Field>
             
             <Field label="Phone number">
@@ -61,18 +68,13 @@ export default function Navbar() {
         </DialogBody>
         <DialogFooter>
           <DialogActionTrigger asChild>
-            <Button variant="outline">Cancel</Button>
+            <Button variant="outline">Close</Button>
           </DialogActionTrigger>
-          <Button type="submit" loading={isSubmitting}>Save</Button>
+          <Button type="submit" loading={isSubmitting}>Add</Button>
         </DialogFooter>
         </form>
       </DialogContent>
-    </DialogRoot>
-      
-      
+    </DialogRoot>      
     </div>
-    
-</>
-    
   )
 }
