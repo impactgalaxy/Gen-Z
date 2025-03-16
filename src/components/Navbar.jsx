@@ -1,6 +1,6 @@
 
 import { IoMdPersonAdd } from "react-icons/io";
-import { Button, Heading, Input, Stack } from "@chakra-ui/react"
+import { Button, Flex, Heading, Input, Stack } from "@chakra-ui/react"
 import {
   DialogActionTrigger,
   DialogBody,
@@ -36,7 +36,7 @@ export default function Navbar() {
       }
     };
   return (
-    <div className='flex bg-amber-600 items-center justify-between'>
+    <Flex justify="space-between" align="center" p="3" colorPalette="purple" wrap="wrap" gap="4">
         <Heading fontSize="xl" color="fg">Welcome</Heading>
         <Heading fontSize="xl" color="fg">Gen-Z mess (mirpur branch)</Heading>
       
@@ -75,6 +75,6 @@ export default function Navbar() {
         </form>
       </DialogContent>
     </DialogRoot>      
-    </div>
+    </Flex>
   )
 }

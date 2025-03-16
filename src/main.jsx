@@ -35,7 +35,7 @@ createRoot(document.getElementById('root')).render(
     <QueryClientProvider client={queryClient}>
     <Provider>
     <RouterProvider router={router} />
-    <Toaster/>
+    <Toaster toastOptions={{duration: 5000}}/>
     </Provider>
     </QueryClientProvider>
   </StrictMode>,
