@@ -1,28 +1,28 @@
 import {  Button, Card, Flex, Heading, HStack, Stack, Text } from "@chakra-ui/react"
 import { Avatar } from "@/components/ui/avatar"
 import { LuCheck } from "react-icons/lu"
-import { useQuery } from "@tanstack/react-query"
 import { Link } from "react-router";
 import AddBalance from "./AddBalance";
 import AddMeals from "./AddMeals"
+import { useQuery } from "@tanstack/react-query";
 
 // import { FaDollarSign } from "react-icons/fa";
 
 const MemberProfile = () => {
   
-      
   const { isPending, error, data } = useQuery({
-          queryKey: ['repoData'],
-          queryFn: () =>
-            fetch('http://localhost:5000/allMembers').then((res) =>
-              res.json(),
-            ),
-          
-        })
-      
-        if (isPending) return <Heading textAlign="center" paddingTop="10px" fontSize="2xl">Loading....</Heading>
-      
-        if (error) return <Heading textAlign="center" paddingTop="10px" fontSize="2xl">An error has occurred: {error.message}</Heading>
+    queryKey: ['allMember'],
+    queryFn: () =>
+      fetch('http://localhost:5000/allMembers').then((res) =>
+        res.json(),
+      ),
+    
+  })
+
+  if (isPending) return <Heading textAlign="center" paddingTop="10px" fontSize="2xl">Loading....</Heading>
+
+  if (error) return <Heading textAlign="center" paddingTop="10px" fontSize="2xl">An error has occurred: {error.message}</Heading> 
+  
   
 
   

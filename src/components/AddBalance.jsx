@@ -8,7 +8,7 @@ import moment from "moment";
 
 export default function AddBalance({name, id}) {
 
-    const {register, handleSubmit, reset} = useForm();
+    const {register, handleSubmit, reset, formState:{isSubmitting}} = useForm();
 
     const handleAddBalance = async(value)=>{
         value.date = moment().format("LL");
@@ -44,7 +44,7 @@ export default function AddBalance({name, id}) {
                     <form onSubmit={handleSubmit(handleAddBalance)}>
       
                     <Input placeholder="Amount" size="sm" {...register("balance")} required/>
-                    <Button marginTop="20px" float="right" type="submit" variant="surface" colorPalette="green">Add</Button>
+                    <Button marginTop="20px" isLoading={isSubmitting} float="right" type="submit" variant="surface" colorPalette="green">Add</Button>
           </form>
           {/* <Input placeholder='Amount'/> */}
                   </Popover.Body>

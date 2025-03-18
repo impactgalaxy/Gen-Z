@@ -18,7 +18,7 @@ import PropTypes from "prop-types";
 
 export default function AddMeals({name, occupation, id, }) {
 
-    const {register, handleSubmit, formState: {isSubmitting}, reset}= useForm();
+    const {register, handleSubmit, formState: {isSubmitting}, reset,}= useForm();
 
     const handleSave = async (data)=>{
         const dd = (data?.date === "" ? moment().format("LL") : moment(data?.date).format("LL"));
