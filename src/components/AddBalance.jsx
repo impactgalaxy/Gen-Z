@@ -5,20 +5,23 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import PropTypes from 'prop-types'; // ES6
 import moment from "moment";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function AddBalance({name, id}) {
+  const queryClient = useQueryClient()
+
 
     const {register, handleSubmit, reset, formState:{isSubmitting}} = useForm();
 
     const handleAddBalance = async(value)=>{
         value.date = moment().format("LL");
         value.memberId = id;
-        console.log(id, value)
         try {
             const response = await axios.post(`http://localhost:5000/balance`, value);
             if(response.data.insertedId){
               toast.success("Balance added successfully");
               reset();
+              queryClient.invalidateQueries({ queryKey: ['allMember']});
             }
           } catch (error) {
             console.error('Operation failed:', error);
@@ -44,9 +47,8 @@ export default function AddBalance({name, id}) {
                     <form onSubmit={handleSubmit(handleAddBalance)}>
       
                     <Input placeholder="Amount" size="sm" {...register("balance")} required/>
-                    <Button marginTop="20px" isLoading={isSubmitting} float="right" type="submit" variant="surface" colorPalette="green">Add</Button>
+                    <Button marginTop="20px" loading={isSubmitting} float="right" type="submit" variant="surface" colorPalette="green">Add</Button>
           </form>
-          {/* <Input placeholder='Amount'/> */}
                   </Popover.Body>
                 </Popover.Content>
               </Popover.Positioner>

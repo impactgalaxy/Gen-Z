@@ -9,14 +9,16 @@ import {
   } from "@/components/ui/dialog";
 import { Button, DialogBody, Flex, Heading, Input, Stack } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
-import { IoIosAddCircle } from "react-icons/io";
 import { Field } from "./ui/field";
 import moment from "moment";
 import axios from "axios";
 import toast from "react-hot-toast";
 import PropTypes from "prop-types";
+import { FaMediumM } from "react-icons/fa";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function AddMeals({name, occupation, id, }) {
+  const queryClient = useQueryClient()
 
     const {register, handleSubmit, formState: {isSubmitting}, reset,}= useForm();
 
@@ -33,6 +35,7 @@ export default function AddMeals({name, occupation, id, }) {
           if(response.data.modifiedCount){
             toast.success("Meals added successfully");
             reset();
+            queryClient.invalidateQueries({ queryKey: ['allMember']});
           }
         } catch (error) {
           console.error('Operation failed:', error);
@@ -42,14 +45,12 @@ export default function AddMeals({name, occupation, id, }) {
       }
   return (
     <div>
-      <DialogRoot>
+      <DialogRoot size="sm">
       <DialogTrigger asChild>
       
-      <Button variant="subtle" colorPalette="green" flex="1">
-      <IoIosAddCircle />
-      Add meal
-    </Button>
-      </DialogTrigger>
+      <FaMediumM title="Add Meals" className="text-3xl! p-1! cursor-pointer text-green-600! bg-slate-100! hover:bg-slate-300! rounded-full transition-all" />
+
+      </DialogTrigger >
       <DialogContent>
         <DialogHeader>
           <DialogTitle>{name} </DialogTitle>
@@ -58,12 +59,11 @@ export default function AddMeals({name, occupation, id, }) {
         <form onSubmit={handleSubmit(handleSave)}>
         <DialogBody>
         <Stack gap="5">
+          <p className="text-[10px]! text-red-700">If you don&apos;t select any data it will automatecaly provided date of today and meal of zero*</p>
         <Field label="Select date"  >
       <Input type="date" {...register("date")} />
         </Field>
-        {/* <Field label="Deposit"  >
-      <Input placeholder="Amount" {...register("amount")}/>
-        </Field> */}
+        
         <Field label="Meal">
       <Flex justify="space-between" align="center" gap="2">
       <Input placeholder="Morning" {...register("morning")}/>
@@ -78,7 +78,7 @@ export default function AddMeals({name, occupation, id, }) {
           <DialogActionTrigger asChild>
             <Button variant="outline" onClick={()=>reset()}>Cancel</Button>
           </DialogActionTrigger>
-          <Button type="submit" loading={isSubmitting}>Save</Button>
+          <Button type="submit" loading={isSubmitting} colorPalette="cyan">Add</Button>
         </DialogFooter>
           </form>
         

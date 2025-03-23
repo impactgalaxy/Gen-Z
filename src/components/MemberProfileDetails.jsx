@@ -48,10 +48,9 @@ export default function MemberProfileDetails() {
 
     
       const {fullName, totalBalance, registrationDate, totalMeals} = query1.data;
-
-      console.log(query2.data)
       const meals = TotalMeal(totalMeals);
       const totalM = meals.morning + meals.noon + meals.night;
+      console.log(meals, totalM)
       
       
   return (

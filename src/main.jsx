@@ -24,6 +24,10 @@ const router = createBrowserRouter([
       {
         path: "/member/:id",
         element: <MemberProfileDetails/>
+      },
+      {
+        path: "/admin",
+        element: <h1 className='text-center text-5xl!'>Admin Route</h1>
       }
     ]
   }

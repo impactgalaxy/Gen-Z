@@ -1,22 +1,14 @@
 
 import { IoMdPersonAdd } from "react-icons/io";
-import { Button,  Input, Stack,  } from "@chakra-ui/react"
-import {
-  DialogActionTrigger,
-  DialogBody,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogRoot,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
+import { Button,  CloseButton,  Input, Portal, Stack,  } from "@chakra-ui/react"
+import { Dialog } from "@chakra-ui/react"
 import { Field } from "@/components/ui/field"
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import toast from "react-hot-toast";
 import moment from "moment";
 import { useQueryClient } from "@tanstack/react-query";
+
 // import { useQuery } from "@tanstack/react-query"
 
 
@@ -24,10 +16,9 @@ export default function AddMember() {
     const {register, handleSubmit, formState: {isSubmitting}, reset}= useForm();  
     const date = moment().format('LL');
     const queryClient = useQueryClient();
+         
 
-     
-    
-    const handleRegister = async (data) => {
+     const handleRegister = async (data) => {
       data.registrationDate = date;
       try {
         const response = await axios.post('http://localhost:5000/members', data);
@@ -35,7 +26,7 @@ export default function AddMember() {
           toast.success("Member added successfully");
           reset();
           queryClient.invalidateQueries({ queryKey: ['allMember'] });
-
+          
         }
       } catch (error) {
         console.error('Registration failed:', error);
@@ -45,19 +36,23 @@ export default function AddMember() {
     };
   
     return (
-        <DialogRoot>
-       <DialogTrigger asChild>
-        <Button colorPalette="teal" variant="solid">
+      <>
+<Dialog.Root >
+      <Dialog.Trigger asChild>
+      <Button colorPalette="teal" variant="solid">
             <IoMdPersonAdd /> Add member
         </Button>
-      </DialogTrigger>
-      <DialogContent>
-        
-        <DialogHeader>
-          <DialogTitle>Add member</DialogTitle>
-        </DialogHeader>
-        <form onSubmit={handleSubmit(handleRegister)}>
-        <DialogBody pb="4">
+      </Dialog.Trigger>
+      <Portal>
+        <Dialog.Backdrop />
+        <Dialog.Positioner>
+          <Dialog.Content>
+            <Dialog.Header>
+              <Dialog.Title>Add member</Dialog.Title>
+            </Dialog.Header>
+            <Dialog.Body>
+            <form onSubmit={handleSubmit(handleRegister)}>
+        <Dialog.Body pb="4">
           <Stack gap="4">
             <Field label="Full name">
               <Input placeholder="Full Name" required {...register("fullName")}/>
@@ -70,17 +65,25 @@ export default function AddMember() {
               <Input placeholder="Occupation" {...register("occupation")}/>
             </Field>
           </Stack> 
-        </DialogBody>
-        <DialogFooter>
-          <DialogActionTrigger asChild>
-            <Button variant="outline">Close</Button>
-          </DialogActionTrigger>          
-          <Button type="submit" loading={isSubmitting}>Add</Button>
+        </Dialog.Body>
+        <Dialog.Footer>
+          <Dialog.ActionTrigger asChild>
+            <Button variant="outline" >Cancel</Button>
+          </Dialog.ActionTrigger>          
+          <Button type="submit" colorPalette="cyan" loading={isSubmitting}>Add</Button>
           
-        </DialogFooter>
+        </Dialog.Footer>
         </form>
-      </DialogContent>
-    </DialogRoot>      
+            </Dialog.Body>
+           
+            <Dialog.CloseTrigger asChild>
+              <CloseButton size="sm" />
+            </Dialog.CloseTrigger>
+          </Dialog.Content>
+        </Dialog.Positioner>
+      </Portal>
+    </Dialog.Root>
     
+    </>
   )
 }
